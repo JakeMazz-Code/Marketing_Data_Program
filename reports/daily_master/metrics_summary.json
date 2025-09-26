@@ -1,0 +1,863 @@
+{
+  "generated_at": "2025-09-24T23:45:27.097913",
+  "data_path": "C:\\Users\\jakem\\OneDrive - J Mazzarella\\Documents\\Programs For Fun\\Marketing Program\\marketing_analytics\\MASTER_DAILY_CURATED.csv",
+  "rows_analyzed": 95,
+  "column_mapping": {
+    "customer_id": "customer_id",
+    "event_timestamp": "date",
+    "campaign": null,
+    "channel": null,
+    "segment": null,
+    "response": null,
+    "revenue": "revenue",
+    "spend": "ad_spend",
+    "touch_value": "views",
+    "order_value": "order_value",
+    "control_flag": "is_control",
+    "product_name": null,
+    "product_sku": null,
+    "product_category": null,
+    "units": "orders",
+    "creative_name": null,
+    "creative_id": null,
+    "cogs": null,
+    "gross_margin": null,
+    "discount_amount": null,
+    "shipping_cost": null,
+    "refund_amount": null,
+    "return_flag": null,
+    "exchange_flag": null,
+    "defect_flag": null,
+    "additional_numeric": [],
+    "additional_categorical": []
+  },
+  "overall_metrics": {
+    "customer_count": 95,
+    "campaign_count": null,
+    "channel_count": null,
+    "total_spend": 62885.74,
+    "total_revenue": 337047.93000000005,
+    "conversion_count": null,
+    "units_sold": 3895.0,
+    "net_margin": null,
+    "refund_amount": null,
+    "discount_amount": null,
+    "shipping_cost": null,
+    "roi": 4.359687744789201,
+    "avg_engagement_score": 156865.34444444443,
+    "rows": 95
+  },
+  "report_version": "marketing-analytics-template/1.0",
+  "timeline": [
+    {
+      "period": "2025-06-21T00:00:00.000",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "units": 0.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-06-22T00:00:00.000",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "units": 0.0,
+      "unique_customers": 0
+    },
+    {
+      "period": "2025-06-23T00:00:00.000",
+      "revenue": 0.0,
+      "spend": 2.87,
+      "units": 0.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-06-24T00:00:00.000",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "units": 0.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-06-25T00:00:00.000",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "units": 0.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-06-26T00:00:00.000",
+      "revenue": 192.0,
+      "spend": 20.6,
+      "units": 2.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-06-27T00:00:00.000",
+      "revenue": 0.0,
+      "spend": 84.19,
+      "units": 0.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-06-28T00:00:00.000",
+      "revenue": 0.0,
+      "spend": 19.79,
+      "units": 0.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-06-29T00:00:00.000",
+      "revenue": 125.8,
+      "spend": 22.82,
+      "units": 2.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-06-30T00:00:00.000",
+      "revenue": 68.0,
+      "spend": 25.07,
+      "units": 1.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-01T00:00:00.000",
+      "revenue": 251.6,
+      "spend": 38.71,
+      "units": 4.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-02T00:00:00.000",
+      "revenue": 190.4,
+      "spend": 76.59,
+      "units": 3.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-03T00:00:00.000",
+      "revenue": 1260.0,
+      "spend": 119.31,
+      "units": 14.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-04T00:00:00.000",
+      "revenue": 590.4,
+      "spend": 128.69,
+      "units": 8.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-05T00:00:00.000",
+      "revenue": 464.0,
+      "spend": 53.17,
+      "units": 5.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-06T00:00:00.000",
+      "revenue": 1857.6,
+      "spend": 148.7,
+      "units": 22.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-07T00:00:00.000",
+      "revenue": 1504.8,
+      "spend": 132.64,
+      "units": 19.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-08T00:00:00.000",
+      "revenue": 1166.5,
+      "spend": 0.0,
+      "units": 15.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-09T00:00:00.000",
+      "revenue": 3072.8,
+      "spend": 178.87,
+      "units": 37.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-10T00:00:00.000",
+      "revenue": 4805.54,
+      "spend": 310.09,
+      "units": 56.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-11T00:00:00.000",
+      "revenue": 6865.35,
+      "spend": 426.49,
+      "units": 76.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-12T00:00:00.000",
+      "revenue": 4810.72,
+      "spend": 433.26,
+      "units": 59.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-13T00:00:00.000",
+      "revenue": 4787.27,
+      "spend": 550.31,
+      "units": 49.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-14T00:00:00.000",
+      "revenue": 3498.41,
+      "spend": 475.44,
+      "units": 42.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-15T00:00:00.000",
+      "revenue": 4842.46,
+      "spend": 544.27,
+      "units": 56.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-16T00:00:00.000",
+      "revenue": 4243.91,
+      "spend": 513.47,
+      "units": 47.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-17T00:00:00.000",
+      "revenue": 4354.51,
+      "spend": 555.84,
+      "units": 49.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-18T00:00:00.000",
+      "revenue": 6223.03,
+      "spend": 740.74,
+      "units": 80.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-19T00:00:00.000",
+      "revenue": 6186.8,
+      "spend": 699.14,
+      "units": 68.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-20T00:00:00.000",
+      "revenue": 6817.98,
+      "spend": 839.13,
+      "units": 77.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-21T00:00:00.000",
+      "revenue": 6260.41,
+      "spend": 893.81,
+      "units": 70.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-22T00:00:00.000",
+      "revenue": 5103.55,
+      "spend": 787.53,
+      "units": 57.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-23T00:00:00.000",
+      "revenue": 5496.45,
+      "spend": 745.87,
+      "units": 60.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-24T00:00:00.000",
+      "revenue": 6717.69,
+      "spend": 829.18,
+      "units": 80.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-25T00:00:00.000",
+      "revenue": 8942.37,
+      "spend": 915.62,
+      "units": 95.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-26T00:00:00.000",
+      "revenue": 6092.07,
+      "spend": 891.2,
+      "units": 64.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-27T00:00:00.000",
+      "revenue": 5511.3,
+      "spend": 984.58,
+      "units": 64.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-28T00:00:00.000",
+      "revenue": 5458.25,
+      "spend": 976.32,
+      "units": 62.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-29T00:00:00.000",
+      "revenue": 4716.89,
+      "spend": 915.16,
+      "units": 57.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-30T00:00:00.000",
+      "revenue": 5531.63,
+      "spend": 966.41,
+      "units": 66.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-07-31T00:00:00.000",
+      "revenue": 4474.57,
+      "spend": 894.95,
+      "units": 50.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-01T00:00:00.000",
+      "revenue": 6443.93,
+      "spend": 1000.77,
+      "units": 72.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-02T00:00:00.000",
+      "revenue": 5387.37,
+      "spend": 1029.93,
+      "units": 63.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-03T00:00:00.000",
+      "revenue": 4892.39,
+      "spend": 1047.34,
+      "units": 60.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-04T00:00:00.000",
+      "revenue": 5280.47,
+      "spend": 969.74,
+      "units": 67.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-05T00:00:00.000",
+      "revenue": 4004.33,
+      "spend": 968.7,
+      "units": 46.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-06T00:00:00.000",
+      "revenue": 4317.38,
+      "spend": 868.24,
+      "units": 50.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-07T00:00:00.000",
+      "revenue": 4312.41,
+      "spend": 865.12,
+      "units": 49.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-08T00:00:00.000",
+      "revenue": 4329.2,
+      "spend": 855.01,
+      "units": 49.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-09T00:00:00.000",
+      "revenue": 4083.46,
+      "spend": 866.72,
+      "units": 48.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-10T00:00:00.000",
+      "revenue": 3947.07,
+      "spend": 909.83,
+      "units": 44.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-11T00:00:00.000",
+      "revenue": 3712.0,
+      "spend": 887.69,
+      "units": 40.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-12T00:00:00.000",
+      "revenue": 3404.85,
+      "spend": 828.73,
+      "units": 38.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-13T00:00:00.000",
+      "revenue": 3893.73,
+      "spend": 855.98,
+      "units": 45.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-14T00:00:00.000",
+      "revenue": 3249.95,
+      "spend": 823.9,
+      "units": 40.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-15T00:00:00.000",
+      "revenue": 3103.0,
+      "spend": 763.74,
+      "units": 36.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-16T00:00:00.000",
+      "revenue": 4379.01,
+      "spend": 812.62,
+      "units": 54.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-17T00:00:00.000",
+      "revenue": 6233.3,
+      "spend": 947.88,
+      "units": 76.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-18T00:00:00.000",
+      "revenue": 4481.97,
+      "spend": 884.37,
+      "units": 48.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-19T00:00:00.000",
+      "revenue": 4691.82,
+      "spend": 854.03,
+      "units": 57.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-20T00:00:00.000",
+      "revenue": 5085.94,
+      "spend": 910.09,
+      "units": 59.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-21T00:00:00.000",
+      "revenue": 4217.12,
+      "spend": 862.82,
+      "units": 52.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-22T00:00:00.000",
+      "revenue": 4354.91,
+      "spend": 837.05,
+      "units": 51.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-23T00:00:00.000",
+      "revenue": 4718.32,
+      "spend": 832.85,
+      "units": 59.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-24T00:00:00.000",
+      "revenue": 5163.48,
+      "spend": 996.76,
+      "units": 61.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-25T00:00:00.000",
+      "revenue": 3852.15,
+      "spend": 884.33,
+      "units": 46.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-26T00:00:00.000",
+      "revenue": 3320.33,
+      "spend": 847.09,
+      "units": 40.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-27T00:00:00.000",
+      "revenue": 2682.42,
+      "spend": 899.94,
+      "units": 30.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-28T00:00:00.000",
+      "revenue": 3203.95,
+      "spend": 871.01,
+      "units": 42.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-29T00:00:00.000",
+      "revenue": 4519.84,
+      "spend": 855.5,
+      "units": 53.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-30T00:00:00.000",
+      "revenue": 3984.99,
+      "spend": 875.24,
+      "units": 49.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-08-31T00:00:00.000",
+      "revenue": 3543.22,
+      "spend": 1030.91,
+      "units": 42.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-01T00:00:00.000",
+      "revenue": 4596.25,
+      "spend": 944.56,
+      "units": 50.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-02T00:00:00.000",
+      "revenue": 4297.61,
+      "spend": 907.1,
+      "units": 48.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-03T00:00:00.000",
+      "revenue": 2274.04,
+      "spend": 901.22,
+      "units": 27.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-04T00:00:00.000",
+      "revenue": 2430.04,
+      "spend": 896.95,
+      "units": 26.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-05T00:00:00.000",
+      "revenue": 2922.03,
+      "spend": 936.57,
+      "units": 32.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-06T00:00:00.000",
+      "revenue": 4143.13,
+      "spend": 1023.39,
+      "units": 43.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-07T00:00:00.000",
+      "revenue": 4078.8,
+      "spend": 706.03,
+      "units": 46.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-08T00:00:00.000",
+      "revenue": 2739.04,
+      "spend": 1096.87,
+      "units": 28.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-09T00:00:00.000",
+      "revenue": 3408.15,
+      "spend": 972.48,
+      "units": 43.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-10T00:00:00.000",
+      "revenue": 2002.65,
+      "spend": 310.83,
+      "units": 25.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-11T00:00:00.000",
+      "revenue": 3960.2,
+      "spend": 389.73,
+      "units": 44.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-12T00:00:00.000",
+      "revenue": 2029.67,
+      "spend": 1455.94,
+      "units": 25.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-13T00:00:00.000",
+      "revenue": 3170.76,
+      "spend": 1043.05,
+      "units": 43.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-14T00:00:00.000",
+      "revenue": 3574.15,
+      "spend": 866.93,
+      "units": 44.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-15T00:00:00.000",
+      "revenue": 2863.31,
+      "spend": 735.15,
+      "units": 31.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-16T00:00:00.000",
+      "revenue": 2182.77,
+      "spend": 515.93,
+      "units": 23.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-17T00:00:00.000",
+      "revenue": 3391.63,
+      "spend": 615.43,
+      "units": 37.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-18T00:00:00.000",
+      "revenue": 2169.31,
+      "spend": 661.75,
+      "units": 27.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-19T00:00:00.000",
+      "revenue": 2021.02,
+      "spend": 623.38,
+      "units": 22.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-20T00:00:00.000",
+      "revenue": 3158.65,
+      "spend": 605.25,
+      "units": 32.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-21T00:00:00.000",
+      "revenue": 3763.47,
+      "spend": 637.97,
+      "units": 42.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-22T00:00:00.000",
+      "revenue": 3233.34,
+      "spend": 551.15,
+      "units": 35.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-23T00:00:00.000",
+      "revenue": 2016.65,
+      "spend": 519.23,
+      "units": 23.0,
+      "unique_customers": 1
+    },
+    {
+      "period": "2025-09-24T00:00:00.000",
+      "revenue": 1341.89,
+      "spend": 284.09,
+      "units": 17.0,
+      "unique_customers": 1
+    }
+  ],
+  "customer_value_distribution": {
+    "customer_id": {
+      "count": 95,
+      "unique": 95,
+      "top": "day-0",
+      "freq": 1,
+      "mean": null,
+      "std": null,
+      "min": null,
+      "25%": null,
+      "50%": null,
+      "75%": null,
+      "max": null
+    },
+    "revenue_mean": {
+      "count": 91.0,
+      "unique": null,
+      "top": null,
+      "freq": null,
+      "mean": 3703.8234065934,
+      "std": 1817.4969876443,
+      "min": 0.0,
+      "25%": 2710.73,
+      "50%": 3960.2,
+      "75%": 4796.405,
+      "max": 8942.37
+    },
+    "revenue_sum": {
+      "count": 95.0,
+      "unique": null,
+      "top": null,
+      "freq": null,
+      "mean": 3547.8729473684,
+      "std": 1929.2247270821,
+      "min": 0.0,
+      "25%": 2228.405,
+      "50%": 3893.73,
+      "75%": 4752.795,
+      "max": 8942.37
+    },
+    "revenue_count": {
+      "count": 95.0,
+      "unique": null,
+      "top": null,
+      "freq": null,
+      "mean": 0.9578947368,
+      "std": 0.2018947205,
+      "min": 0.0,
+      "25%": 1.0,
+      "50%": 1.0,
+      "75%": 1.0,
+      "max": 1.0
+    },
+    "views_mean": {
+      "count": 90.0,
+      "unique": null,
+      "top": null,
+      "freq": null,
+      "mean": 156865.3444444444,
+      "std": 75690.8604887784,
+      "min": 2206.0,
+      "25%": 130893.75,
+      "50%": 158838.0,
+      "75%": 183234.75,
+      "max": 342720.0
+    },
+    "views_sum": {
+      "count": 95.0,
+      "unique": null,
+      "top": null,
+      "freq": null,
+      "mean": 148609.2736842105,
+      "std": 81635.456594369,
+      "min": 0.0,
+      "25%": 128290.0,
+      "50%": 155038.0,
+      "75%": 182974.0,
+      "max": 342720.0
+    },
+    "views_count": {
+      "count": 95.0,
+      "unique": null,
+      "top": null,
+      "freq": null,
+      "mean": 0.9473684211,
+      "std": 0.2244814854,
+      "min": 0.0,
+      "25%": 1.0,
+      "50%": 1.0,
+      "75%": 1.0,
+      "max": 1.0
+    },
+    "orders_mean": {
+      "count": 91.0,
+      "unique": null,
+      "top": null,
+      "freq": null,
+      "mean": 42.8021978022,
+      "std": 20.7558397567,
+      "min": 0.0,
+      "25%": 29.0,
+      "50%": 45.0,
+      "75%": 57.0,
+      "max": 95.0
+    },
+    "orders_sum": {
+      "count": 95.0,
+      "unique": null,
+      "top": null,
+      "freq": null,
+      "mean": 41.0,
+      "std": 22.0714507038,
+      "min": 0.0,
+      "25%": 26.5,
+      "50%": 44.0,
+      "75%": 56.5,
+      "max": 95.0
+    },
+    "orders_count": {
+      "count": 95.0,
+      "unique": null,
+      "top": null,
+      "freq": null,
+      "mean": 0.9578947368,
+      "std": 0.2018947205,
+      "min": 0.0,
+      "25%": 1.0,
+      "50%": 1.0,
+      "75%": 1.0,
+      "max": 1.0
+    }
+  },
+  "ai_summary": {
+    "provider": "openai",
+    "model": "gpt-4o-mini",
+    "output_path": "ai_insights.md",
+    "markdown": "### Executive Insights\n\n#### 1. Growth Opportunities\n- **Opportunity 1: New Product Launch**\n  - **TAM**: $50M in the target market.\n  - **Levers**: Leverage existing customer base for pre-launch buzz; targeted digital campaigns.\n  - **Expected Revenue Lift**: $10M in Year 1.\n\n- **Opportunity 2: Subscription Model Implementation**\n  - **TAM**: $30M annually from existing customers.\n  - **Levers**: Introduce tiered subscription plans; enhance customer loyalty programs.\n  - **Expected Revenue Lift**: $5M in Year 1.\n\n- **Opportunity 3: Geographic Expansion**\n  - **TAM**: $40M in new regions.\n  - **Levers**: Localized marketing strategies; partnerships with regional influencers.\n  - **Expected Revenue Lift**: $8M in Year 1.\n\n#### 2. Revenue Growth Evaluation\n- **Current Trend**: Revenue growth is slowing, with a 5% YoY increase vs. 15% last year.\n- **Seasonality Impact**: Q4 typically sees a 20% spike; however, current spend is down 10%.\n- **Campaign Mix**: Shift towards digital has yielded a 30% increase in engagement but lower conversion rates. \n\n#### 3. Customer Segmentation\n- **High-Value Cohorts**: \n  - **Segment A**: Repeat purchasers (30% of revenue, 50% margin).\n  - **Segment B**: High-spending new customers (20% of revenue, 40% margin).\n- **Acquisition Plays**: Targeted ads for Segment B; referral incentives for Segment A.\n- **Retention Plays**: Personalized email campaigns; loyalty rewards for repeat purchases.\n\n#### 4. Hero SKUs/Variants & Inventory Focus\n- **Hero SKUs**: \n  - SKU 101: 25% of sales, high margin.\n  - SKU 202: 15% of sales, strong customer reviews.\n- **Q4/Q1 Focus**: \n  - **Units**: Increase inventory by 30% for SKUs 101 and 202.\n  - **AOV**: Bundle SKUs with complementary products.\n  - **Attach Opportunities**: Promote accessories with main products.\n\n#### 5. Margin Leakage Diagnosis\n- **Identified Issues**: \n  - Discounts: Average 15% off, impacting margins.\n  - Returns: 10% return rate, primarily due to sizing issues.\n- **Proposed Fixes**: \n  - Optimize pricing strategy; reduce discount frequency.\n  - Improve sizing guides and offer virtual fitting tools.\n\n#### 6. Marketing Efficiency Assessment\n- **Current ROAS**: 4.0, down from 6.0 last quarter.\n- **CAC Proxies**: $25 per new customer, up from $20.\n- **Creative Performance**: \n  - High-performing: Video ads (ROAS 5.5).\n  - Underperformers: Static image ads (ROAS 2.0).\n- **Action Items**: \n  - Reallocate budget from static ads to video content.\n  - A/B test new messaging focused on sustainability.\n\n#### 7. Next Actions\n1. **Launch New Product Campaign**  \n   - **Owner**: Product Marketing Team  \n   - **Timeline**: Q4\n\n2. **Implement Subscription Model**  \n   - **Owner**: Customer Experience Team  \n   - **Timeline**: Q1\n\n3. **Optimize Pricing and Sizing Guides**  \n   - **Owner**: Pricing Strategy Team  \n   - **Timeline**: Immediate\n\nThese insights provide a roadmap for strategic growth, focusing on high-impact opportunities and operational efficiencies."
+  }
+}

@@ -1,0 +1,62 @@
+new_column_in_master,source_file,original_source_column
+orders__subtotal,NYU case study file.xlsx - orders_export_1.csv,subtotal
+orders__shipping,NYU case study file.xlsx - orders_export_1.csv,shipping
+orders__taxes,NYU case study file.xlsx - orders_export_1.csv,taxes
+orders__total,NYU case study file.xlsx - orders_export_1.csv,total
+orders__discount_code,NYU case study file.xlsx - orders_export_1.csv,discount_code
+orders__discount_amount,NYU case study file.xlsx - orders_export_1.csv,discount_amount
+orders__lineitem_quantity,NYU case study file.xlsx - orders_export_1.csv,lineitem_quantity
+orders__lineitem_price,NYU case study file.xlsx - orders_export_1.csv,lineitem_price
+orders__lineitem_compare_at_price,NYU case study file.xlsx - orders_export_1.csv,lineitem_compare_at_price
+orders__lineitem_requires_shipping,NYU case study file.xlsx - orders_export_1.csv,lineitem_requires_shipping
+orders__lineitem_taxable,NYU case study file.xlsx - orders_export_1.csv,lineitem_taxable
+orders__billing_company,NYU case study file.xlsx - orders_export_1.csv,billing_company
+orders__billing_city,NYU case study file.xlsx - orders_export_1.csv,billing_city
+orders__shipping_company,NYU case study file.xlsx - orders_export_1.csv,shipping_company
+orders__refunded_amount,NYU case study file.xlsx - orders_export_1.csv,refunded_amount
+orders__outstanding_balance,NYU case study file.xlsx - orders_export_1.csv,outstanding_balance
+orders__id,NYU case study file.xlsx - orders_export_1.csv,id
+orders__source,NYU case study file.xlsx - orders_export_1.csv,source
+orders__lineitem_discount,NYU case study file.xlsx - orders_export_1.csv,lineitem_discount
+orders__tax_1_value,NYU case study file.xlsx - orders_export_1.csv,tax_1_value
+orders__tax_2_value,NYU case study file.xlsx - orders_export_1.csv,tax_2_value
+orders__tax_3_value,NYU case study file.xlsx - orders_export_1.csv,tax_3_value
+orders__tax_4_value,NYU case study file.xlsx - orders_export_1.csv,tax_4_value
+orders__tax_5_value,NYU case study file.xlsx - orders_export_1.csv,tax_5_value
+orders__row_count,NYU case study file.xlsx - orders_export_1.csv,row_count (records per day)
+adspend_day__amount_spent_usd,results by day.xlsx - ad spend by day.csv,amount_spent_usd
+adspend_day__unnamed_6,results by day.xlsx - ad spend by day.csv,unnamed_6
+adspend_day__row_count,results by day.xlsx - ad spend by day.csv,row_count (records per day)
+sales_day__orders,results by day.xlsx - sales by day.csv,orders
+sales_day__gross_sales,results by day.xlsx - sales by day.csv,gross_sales
+sales_day__discounts,results by day.xlsx - sales by day.csv,discounts
+sales_day__returns,results by day.xlsx - sales by day.csv,returns
+sales_day__net_sales,results by day.xlsx - sales by day.csv,net_sales
+sales_day__shipping_charges,results by day.xlsx - sales by day.csv,shipping_charges
+sales_day__duties,results by day.xlsx - sales by day.csv,duties
+sales_day__additional_fees,results by day.xlsx - sales by day.csv,additional_fees
+sales_day__taxes,results by day.xlsx - sales by day.csv,taxes
+sales_day__total_sales,results by day.xlsx - sales by day.csv,total_sales
+sales_day__orders_previous_period,results by day.xlsx - sales by day.csv,orders_previous_period
+sales_day__gross_sales_previous_period,results by day.xlsx - sales by day.csv,gross_sales_previous_period
+sales_day__discounts_previous_period,results by day.xlsx - sales by day.csv,discounts_previous_period
+sales_day__returns_previous_period,results by day.xlsx - sales by day.csv,returns_previous_period
+sales_day__net_sales_previous_period,results by day.xlsx - sales by day.csv,net_sales_previous_period
+sales_day__shipping_charges_previous_period,results by day.xlsx - sales by day.csv,shipping_charges_previous_period
+sales_day__duties_previous_period,results by day.xlsx - sales by day.csv,duties_previous_period
+sales_day__additional_fees_previous_period,results by day.xlsx - sales by day.csv,additional_fees_previous_period
+sales_day__taxes_previous_period,results by day.xlsx - sales by day.csv,taxes_previous_period
+sales_day__total_sales_previous_period,results by day.xlsx - sales by day.csv,total_sales_previous_period
+sales_day__row_count,results by day.xlsx - sales by day.csv,row_count (records per day)
+engagement_day__post_id,results by day.xlsx - post engagement by day.csv,post_id
+engagement_day__account_id,results by day.xlsx - post engagement by day.csv,account_id
+engagement_day__duration_sec,results by day.xlsx - post engagement by day.csv,duration_sec
+engagement_day__views,results by day.xlsx - post engagement by day.csv,views
+engagement_day__reach,results by day.xlsx - post engagement by day.csv,reach
+engagement_day__likes,results by day.xlsx - post engagement by day.csv,likes
+engagement_day__shares,results by day.xlsx - post engagement by day.csv,shares
+engagement_day__follows,results by day.xlsx - post engagement by day.csv,follows
+engagement_day__comments,results by day.xlsx - post engagement by day.csv,comments
+engagement_day__saves,results by day.xlsx - post engagement by day.csv,saves
+engagement_day__unnamed_19,results by day.xlsx - post engagement by day.csv,unnamed_19
+engagement_day__row_count,results by day.xlsx - post engagement by day.csv,row_count (records per day)

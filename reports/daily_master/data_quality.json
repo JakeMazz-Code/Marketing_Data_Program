@@ -1,0 +1,33 @@
+{
+  "checks": [
+    {
+      "name": "schema_required_columns",
+      "status": "pass",
+      "details": [
+        "sales_day__net_sales",
+        "sales_day__total_sales",
+        "sales_day__orders",
+        "adspend_day__amount_spent_usd",
+        "views_day__primary"
+      ]
+    },
+    {
+      "name": "date_monotonic",
+      "status": "pass"
+    },
+    {
+      "name": "non_negative_spend",
+      "status": "pass"
+    },
+    {
+      "name": "freshness_days",
+      "status": "pass",
+      "value": 2
+    },
+    {
+      "name": "gap_count",
+      "status": "pass",
+      "value": 0
+    }
+  ]
+}

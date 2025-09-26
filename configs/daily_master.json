@@ -1,0 +1,34 @@
+{
+  "version": "1.0.1",
+  "data_root": "Data",
+  "data_path": "Data/master/MASTER_DAILY_JOINED.csv",
+  "date_column": "date",
+  "mappings": {
+    "revenue": "sales_day__net_sales",
+    "total_sales": "sales_day__total_sales",
+    "orders": "sales_day__orders",
+    "ad_spend": "adspend_day__amount_spent_usd",
+    "views": "views_day__primary",
+    "reach": "engagement_day__reach",
+    "likes": "engagement_day__likes",
+    "comments": "engagement_day__comments",
+    "shares": "engagement_day__shares",
+    "follows": "engagement_day__follows",
+    "saves": "engagement_day__saves",
+    "discount_amount": "sales_day__discounts",
+    "returns_amount": "sales_day__returns",
+    "shipping_amount": "sales_day__shipping_charges",
+    "duties_amount": "sales_day__duties",
+    "tax_amount": "sales_day__taxes"
+  },
+  "derived": {
+    "roas": "revenue / ad_spend",
+    "aov": "revenue / orders"
+  },
+  "artifacts_dir": "reports/daily_master",
+  "quality": {
+    "freshness_days": 7,
+    "allow_missing_dates": true,
+    "stop_on_fail": true
+  }
+}

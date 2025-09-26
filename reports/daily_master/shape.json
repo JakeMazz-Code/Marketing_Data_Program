@@ -1,0 +1,27 @@
+{
+  "rows": 96,
+  "min_date": "2025-06-21",
+  "max_date": "2025-09-24",
+  "null_counts": {
+    "sales_day__net_sales": 5,
+    "sales_day__total_sales": 5,
+    "sales_day__orders": 5,
+    "adspend_day__amount_spent_usd": 0,
+    "views_day__primary": 0,
+    "mer": 6,
+    "roas": 6,
+    "aov": 7,
+    "engagement_day__reach": 0,
+    "engagement_day__likes": 0,
+    "engagement_day__comments": 0,
+    "engagement_day__shares": 0,
+    "engagement_day__follows": 0,
+    "engagement_day__saves": 0,
+    "sales_day__discounts": 5,
+    "sales_day__returns": 5,
+    "sales_day__shipping_charges": 5,
+    "sales_day__duties": 5,
+    "sales_day__taxes": 5
+  },
+  "date_monotonic": true
+}

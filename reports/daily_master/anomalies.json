@@ -1,0 +1,56 @@
+[
+  {
+    "date": "2025-07-10",
+    "metric": "mer",
+    "z": 5.155094371692494,
+    "direction": "up",
+    "spend_change_pct": 0.7336054117515511,
+    "engagement_change_pct": -0.19615182212866733,
+    "note": "MER spike w/ concurrent spend +73% and engagement -20%"
+  },
+  {
+    "date": "2025-07-11",
+    "metric": "mer",
+    "z": 5.176950297210638,
+    "direction": "up",
+    "spend_change_pct": 0.37537489116063094,
+    "engagement_change_pct": -0.7409636582352026,
+    "note": "MER spike w/ concurrent spend +38% and engagement -74%"
+  },
+  {
+    "date": "2025-07-11",
+    "metric": "revenue",
+    "z": 3.418791589544342,
+    "direction": "up",
+    "spend_change_pct": 0.37537489116063094,
+    "engagement_change_pct": -0.7409636582352026,
+    "note": "Revenue spike w/ concurrent spend +38% and engagement -74%"
+  },
+  {
+    "date": "2025-07-20",
+    "metric": "revenue",
+    "z": 2.5775570844920304,
+    "direction": "up",
+    "spend_change_pct": 0.20023171324770428,
+    "engagement_change_pct": 0.03904525386313473,
+    "note": "Revenue spike w/ concurrent spend +20% and engagement +4%"
+  },
+  {
+    "date": "2025-07-25",
+    "metric": "revenue",
+    "z": 3.3504221563681544,
+    "direction": "up",
+    "spend_change_pct": 0.1042475698883234,
+    "engagement_change_pct": 1.3365359420036684,
+    "note": "Revenue spike w/ concurrent spend +10% and engagement +134%"
+  },
+  {
+    "date": "2025-09-11",
+    "metric": "mer",
+    "z": 3.6993868356199093,
+    "direction": "up",
+    "spend_change_pct": 0.25383650226812104,
+    "engagement_change_pct": -0.3792211924744441,
+    "note": "MER spike w/ concurrent spend +25% and engagement -38%"
+  }
+]

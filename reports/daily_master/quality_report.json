@@ -1,0 +1,49 @@
+{
+  "status": "PASS",
+  "rules": [
+    {
+      "name": "R1 Schema",
+      "status": "PASS",
+      "detail": "All required columns present",
+      "sample_rows": null
+    },
+    {
+      "name": "R2 Types",
+      "status": "PASS",
+      "detail": "Datetime index is daily, naive, and monotonic",
+      "sample_rows": null
+    },
+    {
+      "name": "R3 Freshness",
+      "status": "PASS",
+      "detail": "Latest date 2025-09-24 within freshness threshold (7 days)",
+      "sample_rows": null
+    },
+    {
+      "name": "R4 Calendar",
+      "status": "PASS",
+      "detail": "No missing dates between min and max",
+      "sample_rows": null
+    },
+    {
+      "name": "R5 Duplicates",
+      "status": "PASS",
+      "detail": "No duplicate dates detected",
+      "sample_rows": null
+    },
+    {
+      "name": "R6 Range",
+      "status": "PASS",
+      "detail": "Revenue, ad_spend, orders, and views are non-negative",
+      "sample_rows": null
+    }
+  ],
+  "stats": {
+    "rows": 96,
+    "min_date": "2025-06-21",
+    "max_date": "2025-09-24",
+    "freshness_days": 7,
+    "missing_dates": 0,
+    "duplicate_dates": 0
+  }
+}
