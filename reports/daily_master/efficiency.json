@@ -1,0 +1,437 @@
+{
+  "as_of": "2025-09-24",
+  "window_days": 28,
+  "scope": "paid",
+  "by_channel": [
+    {
+      "channel": "0.0",
+      "revenue": 15564.16,
+      "spend": 0.0,
+      "orders": 26072
+    },
+    {
+      "channel": "11672547.0",
+      "revenue": 13372.09,
+      "spend": 0.0,
+      "orders": 25425
+    },
+    {
+      "channel": "15563396.0",
+      "revenue": 19677.91,
+      "spend": 0.0,
+      "orders": 35003
+    },
+    {
+      "channel": "19454245.0",
+      "revenue": 17918.75,
+      "spend": 0.0,
+      "orders": 34034
+    },
+    {
+      "channel": "23345094.0",
+      "revenue": 4798.04,
+      "spend": 0.0,
+      "orders": 9176
+    },
+    {
+      "channel": "27235943.0",
+      "revenue": 3559.42,
+      "spend": 0.0,
+      "orders": 6342
+    },
+    {
+      "channel": "3890849.0",
+      "revenue": 5556.22,
+      "spend": 0.0,
+      "orders": 8590
+    },
+    {
+      "channel": "7781698.0",
+      "revenue": 13404.4,
+      "spend": 0.0,
+      "orders": 24879
+    },
+    {
+      "channel": "Nan",
+      "revenue": 4170.36,
+      "spend": 0.0,
+      "orders": 0
+    },
+    {
+      "channel": "Other",
+      "revenue": 283063.26,
+      "spend": 21833.64,
+      "orders": 2997
+    }
+  ],
+  "by_creative": [
+    {
+      "creative_id": "1.7855446047455308e+16",
+      "channel": "15563396.0",
+      "revenue": 5695.1,
+      "spend": 0.0,
+      "views": 19618,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.7855446047455308e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 19618,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.7874940008421428e+16",
+      "channel": "15563396.0",
+      "revenue": 2447.08,
+      "spend": 0.0,
+      "views": 22176,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.7874940008421428e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 22176,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.808742963187342e+16",
+      "channel": "3890849.0",
+      "revenue": 2073.02,
+      "spend": 0.0,
+      "views": 22326,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.808742963187342e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 22326,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.810054022272187e+16",
+      "channel": "7781698.0",
+      "revenue": 2337.17,
+      "spend": 0.0,
+      "views": 13513,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.810054022272187e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 13513,
+      "clicks": 0
+    },
+    {
+      "creative_id": "3.5849631411291296e+16",
+      "channel": "7781698.0",
+      "revenue": 4190.15,
+      "spend": 0.0,
+      "views": 56741,
+      "clicks": 0
+    },
+    {
+      "creative_id": "3.5849631411291296e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 56741,
+      "clicks": 0
+    },
+    {
+      "creative_id": "3.585312356124417e+16",
+      "channel": "19454245.0",
+      "revenue": 3285.4,
+      "spend": 0.0,
+      "views": 32583,
+      "clicks": 0
+    },
+    {
+      "creative_id": "3.585312356124417e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 32583,
+      "clicks": 0
+    },
+    {
+      "creative_id": "3.631505493275889e+16",
+      "channel": "Nan",
+      "revenue": 2651.27,
+      "spend": 0.0,
+      "views": 28296,
+      "clicks": 0
+    },
+    {
+      "creative_id": "3.631505493275889e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 28296,
+      "clicks": 0
+    },
+    {
+      "creative_id": "3.631555399623475e+16",
+      "channel": "23345094.0",
+      "revenue": 4798.04,
+      "spend": 0.0,
+      "views": 17550,
+      "clicks": 0
+    },
+    {
+      "creative_id": "3.631555399623475e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 17550,
+      "clicks": 0
+    },
+    {
+      "creative_id": "3.644313970902249e+16",
+      "channel": "3890849.0",
+      "revenue": 3483.2,
+      "spend": 0.0,
+      "views": 28868,
+      "clicks": 0
+    },
+    {
+      "creative_id": "3.644313970902249e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 28868,
+      "clicks": 0
+    },
+    {
+      "creative_id": "5.435395542684466e+16",
+      "channel": "7781698.0",
+      "revenue": 3229.56,
+      "spend": 0.0,
+      "views": 62778,
+      "clicks": 0
+    },
+    {
+      "creative_id": "5.4353955426844664e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 62778,
+      "clicks": 0
+    },
+    {
+      "creative_id": "5.444179691712925e+16",
+      "channel": "19454245.0",
+      "revenue": 2205.07,
+      "spend": 0.0,
+      "views": 47361,
+      "clicks": 0
+    },
+    {
+      "creative_id": "5.444179691712925e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 47361,
+      "clicks": 0
+    },
+    {
+      "creative_id": "7.187023873095272e+16",
+      "channel": "0.0",
+      "revenue": 2986.74,
+      "spend": 0.0,
+      "views": 138680,
+      "clicks": 0
+    },
+    {
+      "creative_id": "7.187023873095272e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 138680,
+      "clicks": 0
+    },
+    {
+      "creative_id": "7.210439043345259e+16",
+      "channel": "15563396.0",
+      "revenue": 3934.27,
+      "spend": 0.0,
+      "views": 60389,
+      "clicks": 0
+    },
+    {
+      "creative_id": "7.210439043345259e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 60389,
+      "clicks": 0
+    },
+    {
+      "creative_id": "7.229951574620933e+16",
+      "channel": "19454245.0",
+      "revenue": 4243.04,
+      "spend": 0.0,
+      "views": 181201,
+      "clicks": 0
+    },
+    {
+      "creative_id": "7.229951574620933e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 181201,
+      "clicks": 0
+    },
+    {
+      "creative_id": "9.03621092237748e+16",
+      "channel": "0.0",
+      "revenue": 2556.64,
+      "spend": 0.0,
+      "views": 111683,
+      "clicks": 0
+    },
+    {
+      "creative_id": "9.03621092237748e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 111683,
+      "clicks": 0
+    },
+    {
+      "creative_id": "9.096904671591995e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 109751,
+      "clicks": 0
+    },
+    {
+      "creative_id": "9.096904671591997e+16",
+      "channel": "15563396.0",
+      "revenue": 4245.6,
+      "spend": 0.0,
+      "views": 109751,
+      "clicks": 0
+    },
+    {
+      "creative_id": "9.126383111573174e+16",
+      "channel": "19454245.0",
+      "revenue": 4371.22,
+      "spend": 0.0,
+      "views": 317640,
+      "clicks": 0
+    },
+    {
+      "creative_id": "9.126383111573174e+16",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 317640,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.267182736915397e+17",
+      "channel": "0.0",
+      "revenue": 4160.0,
+      "spend": 0.0,
+      "views": 114218,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.267182736915397e+17",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 114218,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.44952998149605e+17",
+      "channel": "0.0",
+      "revenue": 3563.43,
+      "spend": 0.0,
+      "views": 113364,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.44952998149605e+17",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 113364,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.631298483427128e+17",
+      "channel": "0.0",
+      "revenue": 2297.35,
+      "spend": 0.0,
+      "views": 190679,
+      "clicks": 0
+    },
+    {
+      "creative_id": "1.631298483427128e+17",
+      "channel": "Other",
+      "revenue": 0.0,
+      "spend": 0.0,
+      "views": 190679,
+      "clicks": 0
+    },
+    {
+      "creative_id": "nan",
+      "channel": "11672547.0",
+      "revenue": 13372.09,
+      "spend": 0.0,
+      "views": 0,
+      "clicks": 0
+    },
+    {
+      "creative_id": "nan",
+      "channel": "15563396.0",
+      "revenue": 3355.86,
+      "spend": 0.0,
+      "views": 0,
+      "clicks": 0
+    },
+    {
+      "creative_id": "nan",
+      "channel": "19454245.0",
+      "revenue": 3814.02,
+      "spend": 0.0,
+      "views": 0,
+      "clicks": 0
+    },
+    {
+      "creative_id": "nan",
+      "channel": "27235943.0",
+      "revenue": 3559.42,
+      "spend": 0.0,
+      "views": 0,
+      "clicks": 0
+    },
+    {
+      "creative_id": "nan",
+      "channel": "7781698.0",
+      "revenue": 3647.52,
+      "spend": 0.0,
+      "views": 0,
+      "clicks": 0
+    },
+    {
+      "creative_id": "nan",
+      "channel": "Nan",
+      "revenue": 1519.09,
+      "spend": 0.0,
+      "views": 0,
+      "clicks": 0
+    }
+  ]
+}

@@ -22,7 +22,7 @@
     {
       "name": "freshness_days",
       "status": "pass",
-      "value": 2
+      "value": 4
     },
     {
       "name": "gap_count",

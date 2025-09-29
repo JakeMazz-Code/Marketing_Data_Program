@@ -1,4 +1,4 @@
-"""Daily Master config and artifact pipeline (Data/ aware).
+﻿"""Daily Master config and artifact pipeline (Data/ aware).
 
 This module implements PR1: load `configs/daily_master.json`, validate schema/dtypes
 against Data/master (or Data fallback), fill calendar gaps with strict rules, compute
@@ -7,10 +7,10 @@ zero-guarded KPIs, and write LLM-safe aggregated artifacts under reports/daily_m
 
 from __future__ import annotations
 
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, field, asdict
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Dict, Iterable, Optional
+from typing import Dict, Iterable, Optional, Tuple
 
 import json
 import numpy as np
@@ -18,6 +18,7 @@ import pandas as pd
 
 from Marketing_analytics.anomaly import detect_anomalies
 from Marketing_analytics.metrics_registry import compute_series
+from Marketing_analytics.daily_extras import generate_extra_artifacts
 from Marketing_analytics.quality import run_quality_checks, write_quality_artifacts
 
 
@@ -53,6 +54,11 @@ class DailyDerived:
     roas: str = "roas"  # revenue / ad_spend
     aov: str = "aov"  # revenue / orders
 
+@dataclass(slots=True)
+class DailySourceSettings:
+    line_items_glob: Tuple[str, ...] = ()
+
+
 
 @dataclass(slots=True)
 class DailyAnomalySettings:
@@ -71,6 +77,8 @@ class DailyMasterSettings:
     derived: DailyDerived
     anomalies: DailyAnomalySettings
     artifacts_dir: Path
+    sources: DailySourceSettings = field(default_factory=DailySourceSettings)
+
     freshness_days: int = 7
     allow_missing_dates: bool = True
     stop_on_fail: bool = False
@@ -200,6 +208,18 @@ def load_daily_master_settings(config_path: Path, *, data_root_override: Optiona
         z_threshold=anomaly_threshold,
     )
 
+    sources_payload = payload.get("sources") or {}
+    if isinstance(sources_payload, dict):
+        raw_globs = sources_payload.get("line_items_glob") or []
+        if isinstance(raw_globs, str):
+            line_item_globs = (raw_globs,) if raw_globs else ()
+        else:
+            line_item_globs = tuple(str(item) for item in raw_globs if isinstance(item, str) and item)
+    else:
+        line_item_globs = ()
+    if not line_item_globs:
+        line_item_globs = (str((data_root / '*orders_export*.csv')),)
+    sources = DailySourceSettings(line_items_glob=line_item_globs)
     artifacts_dir_raw = payload.get("artifacts_dir", "reports/daily_master")
     artifacts_dir = Path(artifacts_dir_raw)
     if not artifacts_dir.is_absolute():
@@ -217,6 +237,7 @@ def load_daily_master_settings(config_path: Path, *, data_root_override: Optiona
         date_column=date_column,
         mappings=mappings,
         derived=derived,
+        sources=sources,
         anomalies=anomalies,
         artifacts_dir=artifacts_dir,
         freshness_days=freshness_days,
@@ -481,8 +502,31 @@ def run_daily_master(settings: DailyMasterSettings) -> Dict[str, str]:
     }
     llm_path = settings.artifacts_dir / "llm_payload.json"
     llm_path.write_text(json.dumps(llm_payload, indent=2), encoding="utf-8")
+    extra_results = generate_extra_artifacts(settings.data_root, settings.artifacts_dir, line_item_globs=settings.sources.line_items_glob)
+    label_map = {
+        "sku_series": "SKU artifact",
+        "channel_series": "Channel artifact",
+        "campaign_series": "Campaign artifact",
+        "creative_series": "Creative artifact",
+        "margin_series": "Margin artifact",
+        "inventory_snapshot": "Inventory snapshot",
+    }
+    extra_paths: Dict[str, str] = {}
+    for key, result in extra_results.items():
+        label = label_map.get(key, key.replace("_", " ").title())
+        if result.path:
+            last_date = result.last_date or "n/a"
+            cols = ",".join(str(col) for col in result.columns) if result.columns else "n/a"
+            stale_note = ''
+            if getattr(result, 'rows_28d', 0) == 0 and result.rows > 0:
+                stale_note = ' (no rows in last 28d)'
+            print(f"{label}: {result.rows}, last_date={last_date}, rows_28d={getattr(result, 'rows_28d', 'n/a')}{stale_note}, cols={cols}")
+            extra_paths[key] = str(result.path)
+        else:
+            reason = result.missing_reason or "missing inputs"
+            print(f"{label}: skipped ({reason})")
 
-    return {
+    outputs = {
         "series": str(series_path),
         "shape": str(shape_path),
         "data_quality": str(dq_path),
@@ -491,11 +535,20 @@ def run_daily_master(settings: DailyMasterSettings) -> Dict[str, str]:
         "anomalies": str(anomalies_path),
         "anomalies_notes": str(anomalies_notes_path),
     }
-
+    outputs.update(extra_paths)
+    return outputs
 
 def run_daily_master_from_config(config_path: Path, *, data_root_override: Optional[Path] = None) -> Dict[str, str]:
     settings = load_daily_master_settings(Path(config_path), data_root_override=data_root_override)
     return run_daily_master(settings)
+
+
+
+
+
+
+
+
 
 
 

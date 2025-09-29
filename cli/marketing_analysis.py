@@ -177,6 +177,16 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Write a Markdown-only brief without schema or verifier (requires --generate-brief).",
     )
+    parser.add_argument(
+        "--seasonality",
+        type=float,
+        help="Override hero SKU seasonality multiplier (default 1.20).",
+    )
+    parser.add_argument(
+        "--safety",
+        type=float,
+        help="Override safety stock multiplier for inventory planning (default 1.15).",
+    )
 
     parser.add_argument(
         "--until",
@@ -246,7 +256,11 @@ def main() -> None:
             print(f"  {k:18s} {v}")
         if args.generate_brief:
             if args.md_only:
-                brief_paths = generate_brief_md(str(args.config))
+                brief_paths = generate_brief_md(
+                    str(args.config),
+                    seasonality=args.seasonality,
+                    safety=args.safety,
+                )
                 print(f"  brief_md        {brief_paths['brief_md']}")
                 print(f"  brief_raw       {brief_paths['brief_raw']}")
                 return

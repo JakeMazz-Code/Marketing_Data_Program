@@ -1,93 +1,59 @@
-# Daily Master Brief Runbook
+﻿# Daily Master Brief Runbook
 
-This guide walks through generating the executive brief artifacts after the daily master pipeline finishes. The steps cover both Windows PowerShell and Bash shells.
+This runbook covers the Markdown-only executive brief flow. The MD path makes a single OpenAI call, writes `brief.md`
+and `brief_raw.txt`, and never retries for JSON schema errors.
 
-## 1. Required Environment Variables
+## 1. Environment variables
 
-Set the following environment variables before running the brief command (never commit keys to source control):
-
-- `OPENAI_API_KEY`
-- `OPENAI_MODEL_ANALYSIS`
-- `OPENAI_SERIES_DAYS` (optional, defaults to 90)
-- `OPENAI_TOP_ANOMALIES` (optional, defaults to 10)
-- `OPENAI_MAX_OUTPUT_TOKENS` (optional)
-- `OPENAI_REASONING_EFFORT` (only for o3/gpt-5 reasoning routes)
-- `ANTHROPIC_API_KEY` (optional; enables external verification)
-- `ANTHROPIC_MODEL_VERIFIER` (optional; defaults to a Claude Opus variant)
-
-### PowerShell
+Set the following before running the command (PowerShell syntax shown; use `export` on Bash):
 
 ```powershell
 $Env:OPENAI_API_KEY = "sk-your-key"
-$Env:OPENAI_MODEL_ANALYSIS = "gpt-4-0613"   # or another available model
-$Env:OPENAI_SERIES_DAYS = "90"
-$Env:OPENAI_TOP_ANOMALIES = "10"
-$Env:ANTHROPIC_API_KEY = ""  # omit or remove if not available
+$Env:OPENAI_MODEL_ANALYSIS = "gpt-5"   # optional; defaults to gpt-5 with Responses route
+$Env:DEFAULT_SEASONALITY = "1.20"      # optional; overrides hero SKU seasonality multiplier
+$Env:DEFAULT_SAFETY_STOCK = "1.15"     # optional; overrides safety stock multiplier
 ```
 
-### Bash (macOS/Linux)
+`OPENAI_MODEL_ANALYSIS` is only needed if you want a specific model (e.g., `gpt-5.1-mini`). Leave the seasonality and
+safety values unset to use the defaults baked into the report (1.20 and 1.15 respectively).
+
+## 2. Generate the Markdown brief
+
+Run the command from the repo root after the daily master ETL has written fresh artifacts:
+
+```powershell
+.\.venv312\Scripts\python.exe cli\marketing_analysis.py --config configs\daily_master.json --generate-brief --md-only
+```
+
+On Bash/macOS:
 
 ```bash
-export OPENAI_API_KEY="sk-your-key"
-export OPENAI_MODEL_ANALYSIS="gpt-4-0613"
-export OPENAI_SERIES_DAYS=90
-export OPENAI_TOP_ANOMALIES=10
-export ANTHROPIC_API_KEY=""   # leave unset if you do not have a key
+./.venv312/Scripts/python.exe cli/marketing_analysis.py --config configs/daily_master.json --generate-brief --md-only
 ```
 
-> ⚠️ Rotate any API key that was ever printed or pasted into a shared console.
+The CLI prints three log lines of interest:
 
-## 2. Choosing a Model
+- `[Brief] missing:...` when sections fall back to "Not available in artifacts." (harmless)
+- `[Brief] MD-only: model='gpt-5' route='responses' (reasoning=high)` indicating the OpenAI route used
+- `[Brief] MD-only: wrote` with the absolute paths to `brief.md` and `brief_raw.txt`
 
-1. List the available models in your account. For the official OpenAI CLI this looks like:
-   ```bash
-   openai models list
-   ```
-2. Pick a Chat Completions model (`gpt-4`, `gpt-4-0613`, `gpt-3.5-turbo`) **or** a Responses family model (`gpt-4o`, `gpt-4o-mini`, `o3-*`, `gpt-5-*`, `omni-*`).
-3. Set `OPENAI_MODEL_ANALYSIS` to that value. The router will automatically pick the correct API path and strip unsupported parameters.
+## 3. Output files
 
-## 3. Generate Artifacts and Brief
+Both files live under `reports/daily_master/`:
 
-1. Produce the daily master artifacts (run from the repo root):
-   ```bash
-   python -m cli.marketing_analysis --config configs/daily_master.json
-   ```
-2. Generate the brief after artifacts exist:
-   ```bash
-   python -m cli.marketing_analysis --config configs/daily_master.json --generate-brief
-   ```
-   The CLI prints the model route (Chat vs Responses) and the series window used for each attempt.
-3. The following files appear under `reports/daily_master/`:
-   - `brief_draft.json`
-   - `brief_verified.json`
-   - `brief_notes.md`
+- `brief.md` – polished Markdown with the required seven sections in order, followed by **Additional Insights Uncovered (Model Reasoning)** and the legacy summary sections.
+- `brief_raw.txt` – exact model output (useful for diffing or audits).
 
-## 4. Reading `brief_notes.md`
+If optional artifacts such as efficiency or creatives are missing, the brief keeps the section headings and inserts
+"Not available in artifacts.". The log lists those sections as `missing:`.
 
-Open `reports/daily_master/brief_notes.md` and check:
+## 4. Troubleshooting
 
-- `Status: APPROVED` or `Status: REDLINE`
-- Listed issues (e.g., lifts clamped over the 40% baseline)
-- The “Verifier notes” section indicating whether Anthropic approved the draft or a local clamp fallback was used.
+| Symptom | Likely Cause | Fix |
+| --- | --- | --- |
+| `[Brief] Failed: OPENAI_API_KEY environment variable is required` | Key not exported | Set `OPENAI_API_KEY` before running the command. |
+| Brief contains `{{ADDITIONAL_INSIGHTS}}` | Model response returned empty text | Re-run the command; the fixture replaces the placeholder when the call succeeds. |
+| Command reports stale data | ETL artifacts outdated | Re-run the ETL (`python -m cli.marketing_analysis --config configs/daily_master.json --until write`) first. |
 
-## 5. Rotating Leaked Keys
-
-If an API key was ever echoed to the console or written to a log, rotate it immediately via the provider dashboard and update the environment variable with the new key.
-
-## 6. Tuning Anomaly Noise
-
-If anomaly notes dominate the brief:
-
-1. Review `reports/daily_master/anomalies.json`.
-2. Adjust the anomaly sensitivity in your daily master config (e.g., increase the z-score threshold or reduce lookback windows).
-3. Re-run the artifacts and brief commands.
-
-## 7. Updating the Model Route
-
-When your account gains new models (e.g., o3/gpt-5 access):
-
-1. Set `OPENAI_MODEL_ANALYSIS` to the new model name.
-2. Optionally set `OPENAI_REASONING_EFFORT` (e.g., `medium`) for reasoning models.
-3. Re-run the brief command; the router automatically switches to the Responses API with the correct payload format.
-
-Keep this runbook close to your operations documentation so analysts can self-serve the brief generation process.
+To use the original verified JSON flow, omit `--md-only` and ensure Anthropic credentials are available. The MD-only path
+is recommended for daily operations because it avoids schema retries and writes human-readable Markdown instantly.

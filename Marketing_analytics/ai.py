@@ -8,7 +8,7 @@ import time
 from copy import deepcopy
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
 import numpy as np
 import pandas as pd
@@ -28,6 +28,7 @@ except ImportError:  # pragma: no cover - optional dependency
 
 from Marketing_analytics.config import AISummaryConfig
 from Marketing_analytics.daily_master import load_daily_master_settings
+from Marketing_analytics.md_brief import build_md_only_template
 
 
 class AISummarizer:
@@ -203,6 +204,24 @@ def _load_artifacts(artifacts_dir: str | Path) -> Dict[str, Any]:
         else:
             result[key] = None
 
+    # Supplemental jsonl artifacts
+    jsonl_tables = {
+        "sku_series": "sku_series.jsonl",
+        "channel_series": "channel_series.jsonl",
+        "campaign_series": "campaign_series.jsonl",
+        "creative_series": "creative_series.jsonl",
+        "margin_series": "margin_series.jsonl",
+        "inventory_snapshot": "inventory_snapshot.jsonl",
+    }
+    for key, filename in jsonl_tables.items():
+        path = artifacts_path / filename
+        if path.exists():
+            try:
+                result[key] = pd.read_json(path, lines=True)
+            except ValueError:
+                result[key] = pd.DataFrame()
+        else:
+            result[key] = pd.DataFrame()
     # Series data for metric context (JSON lines)
     series_path = artifacts_path / "series.jsonl"
     if series_path.exists():
@@ -1019,6 +1038,45 @@ def _prepare_brief_payload(
         if col and col in series_df.columns:
             series_df[col] = pd.to_numeric(series_df[col], errors="coerce")
 
+    text_synonyms = {
+        "channel": ["channel", "platform", "source"],
+        "campaign": ["campaign", "campaign_name"],
+        "adset": ["adset", "adset_name"],
+        "sku": ["sku", "product_sku", "lineitem_sku", "product_id"],
+        "product_title": ["product_title", "lineitem_title", "product_name", "title"],
+        "creative_id": ["creative_id", "post_id", "ad_id", "ig_id"],
+    }
+    numeric_synonyms = {
+        "revenue": ["revenue", "purchase_value", "total_made", "conversion_value"],
+        "ad_spend": ["ad_spend", "spend", "cost"],
+        "orders": ["orders", "purchases", "conversions"],
+        "views": ["video_views", "views", "impressions"],
+        "units": ["units", "quantity"],
+        "clicks": ["clicks", "link_clicks"],
+    }
+
+    def _copy_synonym_column(target: str, candidates: Iterable[str], *, to_numeric: bool = False) -> None:
+        if target in series_df.columns:
+            return
+        lower_lookup = {str(col).lower(): col for col in series_df.columns}
+        for candidate in candidates:
+            match = lower_lookup.get(candidate)
+            if match is not None:
+                series_df[target] = series_df[match]
+                if to_numeric:
+                    series_df[target] = pd.to_numeric(series_df[target], errors="coerce")
+                return
+
+    for canonical, aliases in text_synonyms.items():
+        _copy_synonym_column(canonical, aliases)
+
+    for canonical, aliases in numeric_synonyms.items():
+        _copy_synonym_column(canonical, aliases, to_numeric=True)
+
+    for text_col in ("channel", "campaign", "adset", "sku", "product_title", "creative_id"):
+        if text_col in series_df.columns:
+            series_df[text_col] = series_df[text_col].astype(str).replace({"nan": "", "None": ""}).str.strip()
+
     if mappings.orders in series_df.columns and mappings.ad_spend in series_df.columns:
         orders = series_df[mappings.orders].astype(float)
         spend = series_df[mappings.ad_spend].astype(float)
@@ -1193,7 +1251,9 @@ def _is_rate_limit_error(exc: Exception) -> bool:
 
 
 
-def generate_brief_md(config_path: str) -> Dict[str, str]:
+
+
+def generate_brief_md(config_path: str, *, seasonality: Optional[float] = None, safety: Optional[float] = None) -> Dict[str, str]:
     """Generate a Markdown-only executive brief using a single OpenAI call."""
 
     if OpenAI is None:
@@ -1202,15 +1262,43 @@ def generate_brief_md(config_path: str) -> Dict[str, str]:
     settings = load_daily_master_settings(Path(config_path))
     artifacts = _load_artifacts(settings.artifacts_dir)
 
-    payload, series_window_days = _prepare_brief_payload(settings, artifacts)
+    def _resolve_float(value: Optional[float], env_keys: Sequence[str], default: float) -> float:
+        if value is not None:
+            try:
+                parsed = float(value)
+            except (TypeError, ValueError):
+                return default
+            return parsed if parsed > 0 else default
+        for env_key in env_keys:
+            raw = os.getenv(env_key, "").strip()
+            if not raw:
+                continue
+            try:
+                parsed = float(raw)
+            except ValueError:
+                continue
+            if parsed > 0:
+                return parsed
+        return default
+
+    seasonality_value = _resolve_float(seasonality, ("SEASONALITY_MULT", "DEFAULT_SEASONALITY"), 1.20)
+    safety_value = _resolve_float(safety, ("SAFETY_STOCK_MULT", "DEFAULT_SAFETY_STOCK"), 1.15)
+
+    template_result = build_md_only_template(
+        settings,
+        artifacts,
+        seasonality=seasonality_value,
+        safety_stock=safety_value,
+    )
+    template_text = template_result.template
 
     api_key = os.getenv("OPENAI_API_KEY", "").strip()
     if not api_key:
         raise RuntimeError("OPENAI_API_KEY environment variable is required to draft the brief.")
 
     client = OpenAI(api_key=api_key)
-    model = os.getenv("OPENAI_MODEL_ANALYSIS", "").strip() or "gpt-5-chat-latest"
 
+    model_env = os.getenv("OPENAI_MODEL_ANALYSIS", "").strip()
     max_tokens_env = os.getenv("OPENAI_MAX_OUTPUT_TOKENS", "").strip()
     try:
         max_tokens = int(max_tokens_env) if max_tokens_env else 3000
@@ -1219,71 +1307,136 @@ def generate_brief_md(config_path: str) -> Dict[str, str]:
     if max_tokens <= 0:
         max_tokens = 3000
 
+    use_responses = False
+    responses_api = getattr(client, "responses", None)
+    if responses_api is not None and hasattr(responses_api, "create"):
+        use_responses = True
+    route_label = "responses" if use_responses else "chat"
+
+    if use_responses:
+        model = model_env or "gpt-5"
+    else:
+        if model_env and model_env.lower() != "gpt-5":
+            model = model_env
+        else:
+            model = "gpt-5-chat-latest"
+
     system_prompt = (
-        "You are a marketing analyst. Write a concise Markdown brief for executives with headings, bullets, "
-        "and absolute dates. Do not include code fences."
+        "You are a marketing analyst. Polish the provided markdown brief without changing headings "
+        "or numeric values. Do not remove sections. Replace the placeholder {{ADDITIONAL_INSIGHTS}} "
+        "with two or three grounded insights, marking any hypotheses explicitly. Never introduce "
+        "new metrics that are not in the draft."
     )
 
-    serialized_payload = json.dumps(payload, separators=(",", ":"), ensure_ascii=False)
+    def _extract_chat_text(response: Any) -> str:
+        choices = getattr(response, "choices", None) or []
+        if not choices:
+            return ""
+        choice = choices[0]
+        message = getattr(choice, "message", None)
+        if message is None and isinstance(choice, dict):
+            message = choice.get("message")
+        if message is None:
+            return ""
+        content = getattr(message, "content", None)
+        if isinstance(content, str):
+            return content
+        parts: List[str] = []
+        for part in content or []:
+            if isinstance(part, dict):
+                for key in ("text", "value", "content"):
+                    value = part.get(key)
+                    if value:
+                        parts.append(str(value))
+                        break
+            else:
+                value = getattr(part, "text", None)
+                if value:
+                    parts.append(str(value))
+        return "\n".join(parts)
 
-    brief_text = ""
-    last_exc: Optional[Exception] = None
+    def _extract_responses_text(response: Any) -> str:
+        if response is None:
+            return ""
+        text_block = getattr(response, "output_text", None)
+        if text_block:
+            return str(text_block)
+        output = getattr(response, "output", None) or []
+        parts: List[str] = []
+        for item in output:
+            if isinstance(item, dict):
+                content = item.get("content") or []
+            else:
+                content = getattr(item, "content", None) or []
+            for block in content:
+                if isinstance(block, dict):
+                    value = block.get("text") or block.get("output_text") or block.get("value") or block.get("content")
+                else:
+                    value = getattr(block, "text", None) or getattr(block, "output_text", None)
+                if value:
+                    parts.append(str(value))
+        return "\n".join(parts)
+
     backoff = [8, 12, 16]
-    route_used = "chat"
+    brief_text = ""
+    last_error: Optional[Exception] = None
 
     for attempt in range(len(backoff)):
         try:
-            response = client.chat.completions.create(
-                model=model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": serialized_payload},
-                ],
-                max_completion_tokens=max_tokens,
-                )
-            choices = getattr(response, "choices", None) or []
-            if not choices:
-                raise RuntimeError("OpenAI returned no choices for the MD brief request.")
-            choice = choices[0]
-            message = getattr(choice, "message", None)
-            if message is None and isinstance(choice, dict):
-                message = choice.get("message")
-            if message is None:
-                raise RuntimeError("OpenAI response did not include a message content block.")
-            content = getattr(message, "content", None)
-            if isinstance(content, str):
-                brief_text = content
+            if use_responses:
+                kwargs: Dict[str, Any] = {
+                    "model": model,
+                    "input": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": template_text},
+                    ],
+                    "store": False,
+                }
+                if max_tokens:
+                    kwargs["max_output_tokens"] = max_tokens
+                kwargs["reasoning"] = {"effort": "high"}
+                response = client.responses.create(**kwargs)
+                brief_text = _extract_responses_text(response)
             else:
-                parts: List[str] = []
-                for part in content or []:  # type: ignore[assignment]
-                    if isinstance(part, dict):
-                        text_part = part.get("text") or part.get("value") or part.get("content")
-                    else:
-                        text_part = getattr(part, "text", None)
-                    if text_part:
-                        parts.append(str(text_part))
-                brief_text = "\n".join(parts)
-            break
+                kwargs = {
+                    "model": model,
+                    "messages": [
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": template_text},
+                    ],
+                }
+                if max_tokens:
+                    kwargs["max_completion_tokens"] = max_tokens
+                response = client.chat.completions.create(**kwargs)
+                brief_text = _extract_chat_text(response)
+            if brief_text:
+                break
         except RateLimitError as exc:
-            last_exc = exc
+            last_error = exc
             if attempt == len(backoff) - 1:
                 raise
-            time.sleep(backoff[min(attempt, len(backoff) - 1)])
+            time.sleep(backoff[attempt])
         except Exception as exc:  # pragma: no cover - network/runtime issues
-            last_exc = exc
+            last_error = exc
             if _is_rate_limit_error(exc) and attempt != len(backoff) - 1:
-                time.sleep(backoff[min(attempt, len(backoff) - 1)])
+                time.sleep(backoff[attempt])
                 continue
             raise
     else:  # pragma: no cover - defensive
-        if last_exc is not None:
-            raise last_exc
+        if last_error is not None:
+            raise last_error
 
     brief_text = (brief_text or "").strip()
     if not brief_text:
-        if last_exc is not None:
-            raise RuntimeError("OpenAI returned empty brief text.") from last_exc
+        if last_error is not None:
+            raise RuntimeError("OpenAI returned empty brief text.") from last_error
         raise RuntimeError("OpenAI returned empty brief text.")
+
+    if "{{ADDITIONAL_INSIGHTS}}" in brief_text:
+        brief_text = brief_text.replace(
+            "{{ADDITIONAL_INSIGHTS}}",
+            "- Insufficient evidence to add new insights.",
+        )
 
     artifacts_dir = settings.artifacts_dir
     artifacts_dir.mkdir(parents=True, exist_ok=True)
@@ -1293,18 +1446,23 @@ def generate_brief_md(config_path: str) -> Dict[str, str]:
     brief_md_path.write_text(brief_text, encoding="utf-8")
     brief_raw_path.write_text(brief_text, encoding="utf-8")
 
-    print(
-        f"[Brief] MD-only: model='{model}' route={route_used} "
-        f"series_window_days={series_window_days} tokens={max_tokens}"
-    )
+    if template_result.missing_sections:
+        missing = ",".join(sorted(set(template_result.missing_sections)))
+        print(f"[Brief] missing:{missing}")
+
+    reasoning_suffix = " (reasoning=high)" if use_responses else ""
+    print("[Brief] MD-only: model='{model}' route='{route}'{suffix} wrote {md}, {raw}".format(
+        model=model,
+        route=route_label,
+        suffix=reasoning_suffix,
+        md=brief_md_path,
+        raw=brief_raw_path,
+    ))
 
     return {
         "brief_md": str(brief_md_path),
         "brief_raw": str(brief_raw_path),
     }
-
-
-
 
 
 

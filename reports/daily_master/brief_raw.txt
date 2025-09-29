@@ -1,67 +1,105 @@
-# Marketing Performance Brief  
-**Period Covered:** June 21, 2025 – September 24, 2025  
-**Generated:** September 26, 2025  
+**Metrics in Plain English**
+- MER (same as ROAS) = Revenue / Ad Spend.
+- CAC = Ad Spend / Orders.
+- AOV = Revenue / Orders.
+- RPM = Revenue / Views x 1,000.
+- CTR = Clicks / Views.
+- Run Rate = Units / 28 days.
 
----
+## Top 3 Growth Opportunities (What & Why & How Next Week)
+MER = Revenue / Ad Spend; CAC = Spend / Orders. Higher MER and lower CAC mean growth dollars are working harder.
+1. **Scale efficient growth** - 7-day MER 4.56x is 0.57 above the 28-day baseline 3.99x, while CAC sits at $19.61 (28-day $21.86). Other contributes 100.0% of 28-day revenue at ROAS 14.94x.
+   - Monday move: Shift the next test budget into Other and hold ROAS above 14.94x.
+   - Funnel check: Label TOF and BOF campaigns so we can monitor mix as we scale.
+   - Safeguard: Refresh creative the moment CAC drifts above $21.86 to preserve payback.
+2. **Bridge the revenue run rate** - Daily revenue averages $2,529.19 vs $3,107.88 (28-day); slope is down. nan / Grey No√≠re Set - Medium drove $10,831.98 (11.9% of 28-day revenue). Run rate is 3.11 units/day; recommended 45-day stock is 193 units.
+   - Monday move: Align promos and inventory around nan / Grey No√≠re Set - Medium and lock the next 45-day buy based on unit data insights.
+   - Safeguard: Automate daily alerts when revenue drifts above or below target so we can adjust fast.
+3. **Repair shipping leakage** - Last 28 days show $21,114.83 in shipping (5.4% of revenue).
+   - Monday move: Audit the SKUs and promo codes driving the leak and set guardrails immediately.
+   - Safeguard: Sync finance and marketing weekly so contribution targets stay protected while we scale.
+
+## Revenue Trend - Accelerating or Slowing? (7d vs 28d vs 90d + Slope + MER)
+We compare short-, mid-, and long-term revenue, MER (same as ROAS here), CAC, and the 56-day slope to spot acceleration.
+- Latest data through 2025-09-24
+- 7-day revenue $17,704.33 vs 28-day $87,020.56 vs 90-day $336,855.93
+- MER: 7-day 4.56x; 28-day 3.99x; 90-day 5.36x
+- CAC: 7-day $19.61; 28-day $21.86; 90-day $16.15
+- 56-day revenue slope $-45 per day (down)
+
+## Customer Segments - Best Cohorts & How to Get More
+Segments are inferred from campaign/ad set names: Prospecting/TOF (cold audiences) versus Retargeting/BOF (warm audiences).
+- Mixed / Unknown: Revenue $10,696.78 (100.0% share), MER 2.43x, CAC $35.73.
+   - Growth move: Tag campaigns with TOF/BOF keywords to expose funnel performance.
+   - Next step: Split mixed audiences by intent (viewed vs purchased) to rebuild clarity.
+
+## Hero SKUs & Q4/Q1 Inventory Plan
+Inventory plan = run rate (units / 28 days) x 45-day horizon x seasonality 1.20 x safety stock 1.15.
+SKU / Product | Revenue (28d) | Units (28d) | Revenue Share | Units Share | Run Rate / day | Rec. 45d Units
+--- | --- | --- | --- | --- | --- | ---
+nan / Grey No√≠re Set - Medium | $10,831.98 | 87 | 11.9% | 8.5% | 3.11 | 193
+nan / Black No√≠re Set - Medium | $9,320.80 | 75 | 10.3% | 7.3% | 2.68 | 167
+nan / Grey No√≠re Set - Small | $8,824.94 | 71 | 9.7% | 6.9% | 2.54 | 158
+nan / Black No√≠re Set - Small | $7,328.19 | 59 | 8.1% | 5.8% | 2.11 | 131
+nan / Grey No√≠re hoodie - Medium | $7,296.14 | 107 | 8.0% | 10.4% | 3.82 | 238
+- Title-based grouping (SKU code not supplied).
+
+## Margin Leakage - What's Hurting Margin & Fixes
+Margin leakage tracks discounts, returns, shipping, duties, and taxes as a share of net revenue; negatives erode contribution.
+- 28-day revenue: $391,781.39
+- Shipping: $21,114.83 (5.4% of revenue)
+- Discounts: $-19,641.48 (-5.0% of revenue)
+- Returns: $-13,360.89 (-3.4% of revenue)
+- Taxes: $2,419.39 (0.6% of revenue)
+- Duties: $0.00 (0.0% of revenue)
+- Heaviest day: 2025-09-07 at $1,510.40
+
+## Marketing Efficiency by Channel (ROAS, CAC, Share)
+MER (same as ROAS here) = Revenue / Ad Spend; CAC = Spend / Orders; Revenue Share shows each channel's contribution over the last 28 days.
+Channel | Revenue | Spend | Orders | ROAS | CAC | Revenue Share
+--- | --- | --- | --- | --- | --- | ---
+Other | $391,781.39 | $26,229.01 | 172,680 | 14.94x | $0.15 | 100.0%
+- Other = 100.0% of 28-day revenue at ROAS 14.94x; CAC $0.15
+
+## Creative Performance - Instagram (and TikTok if present)
+RPM = Revenue / Views x 1,000; ROAS = Revenue / Ad Spend; CTR = Clicks / Views. We highlight the top assets over the last 28 days.
+Creative | Channel | Revenue | Revenue/1k Views | ROAS | CTR
+--- | --- | --- | --- | --- | ---
+1.7855446047455308e+16 | Other | $5,695.10 | $145.15 | inf | 0.0%
+3.631555399623475e+16 | Other | $4,798.04 | $136.70 | inf | 0.0%
+1.787494000842142e+16 | Other | $2,447.08 | $110.35 | inf | 0.0%
+3.5853123561244172e+16 | Other | $3,285.40 | $100.83 | inf | 0.0%
+3.63150549327589e+16 | Other | $2,651.27 | $93.70 | inf | 0.0%
+
+## Additional Insights Uncovered (Model Reasoning)
+- Data scope mismatch appears across sections: 28-day revenue is shown as $87,020.56 in multiple places but $391,781.39 in Margin Leakage and Channel; Orders are 999 in the KPI Appendix vs 172,680 in Channel. Hypothesis: sections may mix different scopes (e.g., sitewide vs paid-only) or have duplicated order events. Align data sources before scaling budget based on these figures.
+- Creative diagnostics: top assets show ROAS as "inf" with CTR at 0.0%, yet meaningful RPM and revenue are reported. Hypothesis: spend and/or click tracking for Other may be missing, inflating ROAS and suppressing CTR. Validate pixels/UTMs and ensure spend is correctly captured prior to reallocations.
+- Naming/attribution hygiene: product titles include artifacts (e.g., "nan" and "No√≠re") and Customer Segments show 100.0% under Mixed/Unknown. Hypothesis: inconsistent naming is hindering funnel and SKU rollups. Enforce a TOF/BOF naming taxonomy and clean SKU titles/codes to improve reporting fidelity.
 
 ## Executive Summary
-- **Short-Term (7d ending Sep 24):** Revenue **$17.7K**, MER **4.56**, CAC **$20.28**, AOV **$89.4**. Stable but below historic highs.  
-- **Medium-Term (28d ending Sep 24):** Revenue **$87.0K**, MER **3.99**, CAC **$22.98**, AOV **$87.1**. MER trending slightly **down** compared with July/Aug.  
-- **Long-Term (90d):** Revenue **$336.9K**, MER **5.36**, AOV **$86.5**: performance remains healthy but showing signs of efficiency erosion.  
-
----
+Quick view of revenue, efficiency, and order value across time horizons.
+- 7-day Revenue: $17,704.33; MER 4.56x; CAC $19.61; AOV $89.42
+- 28-day Revenue: $87,020.56; MER 3.99x; CAC $21.86; AOV $87.11
+- 90-day Revenue: $336,855.93; MER 5.36x; CAC $16.15; AOV $86.53
 
 ## Key Trends
-### Revenue
-- **Peak Days:**  
-  - **Jul 11:** $6.9K (+38% spend, revenue spike noted).  
-  - **Jul 25:** $8.9K record, linked to engagement surge (+134%).  
-- **Recent:** Sep 18–24 saw daily revenue dip to **$1.3K–3.7K**, materially below Jul/Aug benchmarks.
+- Revenue slope trend: down ($-45 per day)
+- MER delta (7d minus 28d): 0.57
+- CAC delta (7d minus 28d): -2.25
 
-### Efficiency (MER/ROAS)
-- **July:** Strong efficiency, MER >8 most days; highlight on **Jul 10–11** with spike >15.  
-- **August:** Moderated MER ~4–6 range.  
-- **September:** Further softening, 7-day MER at **4.59** vs 28-day avg **3.99**; short-term bounce but still well below July highs.  
+## Anomalies
+- mer: 2025-07-10 -> 2025-07-10 (|z|~5.16)
+- mer: 2025-07-11 -> 2025-07-11 (|z|~5.18)
+- revenue: 2025-07-11 -> 2025-07-11 (|z|~3.42)
+- revenue: 2025-07-20 -> 2025-07-20 (|z|~2.58)
+- revenue: 2025-07-25 -> 2025-07-25 (|z|~3.35)
 
-### Costs
-- **CAC:**  
-  - July lows: ~$6–$11.  
-  - August–September averages climbed significantly: 7-day = **$20.3**, 28-day = **$23.0**.  
-  - Efficiency erosion tied to rising CAC.  
+## Data Quality & Caveats
+- Status: PASS
 
-### Engagement
-- **Strong Engagement:** Late June to early July (content virality drove both orders and new followers).  
-- **Recent Weeks:** Sporadic engagement spikes (e.g., Sep 6 & Sep 7 with >7.5K and >3.8K likes), but overall inconsistent.  
-
----
-
-## Anomalies Detected
-- **Jul 10–11:** MER and revenue spike despite falling engagement (-74%). Paid efficiency unusually high.  
-- **Jul 25:** Revenue surge (+$8.9K) aligned with higher engagement (+134%) — likely viral content/offer resonance.  
-- **Sep 11:** MER improved sharply (+10.16) while engagement dropped -38% — efficiency from spend concentration.  
-
----
-
-## Strategic Implications
-- **Growth Dependency on Virality:** Spikes in both revenue and MER were tied to viral content days (Jul 8–11, Jul 25). Sustained growth unlikely without consistent engagement drivers.  
-- **Efficiency Pressure:** CAC has doubled since early July; September figures show revenue contraction vs ad spend effort.  
-- **Scaling Risk:** August–September data suggests diminishing returns on higher spend — revenue plateau despite elevated impressions/views.  
-
----
-
-## Recommendations
-1. **Content:** Reinvest in creative formats proven effective in early July → replicate high-engagement campaigns.  
-2. **Spend Discipline:** Reassess September budget allocations — rising CAC indicates wasted spend; optimize around top-performing audiences/creatives.  
-3. **Retention Play:** With AOV relatively stable (~$87–89), profitability hinges on repeat purchases. Implement retention/loyalty campaigns to offset high CAC.  
-4. **Testing:** Introduce structured daily budget caps; scale responsive content but cut low-performing spend promptly.  
-5. **Benchmark Reset:** Track against July’s high-efficiency baseline, but set more sustainable target metrics: MER ≥5, CAC <$20.  
-
----
-
-## Next Steps
-- **By Sep 30, 2025:** Deliver segmentation on which creatives fueled Jul 25 and Sep 6–7 spikes.  
-- **By Oct 7, 2025:** Roll out content testing calendar (TikTok-style virality formats).  
-- **By Oct 15, 2025:** Report on impact of budget optimization — measure MER stabilization vs current 4.6 baseline.  
-
----  
-**Bottom Line:** After a strong July, efficiency has declined. Immediate action is needed to restore CAC discipline and re-engage audiences with proven content strategies.
+## KPI Appendix (7/28/90-day)
+Window | Revenue | Spend | Orders | MER | CAC | AOV
+--- | --- | --- | --- | --- | --- | ---
+7-day | $17,704.33 | $3,882.82 | 198 | 4.56x | $19.61 | $89.42
+28-day | $87,020.56 | $21,833.64 | 999 | 3.99x | $21.86 | $87.11
+90-day | $336,855.93 | $62,862.27 | 3,893 | 5.36x | $16.15 | $86.53
