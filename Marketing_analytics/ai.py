@@ -27,6 +27,8 @@ except ImportError:  # pragma: no cover - optional dependency
     anthropic = None  # type: ignore[misc]
 
 from Marketing_analytics.config import AISummaryConfig
+from Marketing_analytics.etl_text_clean import normalize_product_title
+import re
 from Marketing_analytics.daily_master import load_daily_master_settings
 from Marketing_analytics.md_brief import build_md_only_template
 
@@ -1254,7 +1256,13 @@ def _is_rate_limit_error(exc: Exception) -> bool:
 
 
 def generate_brief_md(config_path: str, *, seasonality: Optional[float] = None, safety: Optional[float] = None) -> Dict[str, str]:
-    """Generate a Markdown-only executive brief using a single OpenAI call."""
+    """Generate a Markdown-only executive brief using a single OpenAI call.
+
+    Model-safe routing rules:
+    - If OPENAI_MODEL_ANALYSIS looks like a Responses-capable model (^(gpt-5|o3)), prefer Responses.
+    - Otherwise, use Chat Completions without unsupported parameters.
+    - On 4xx/empty text, automatically fallback to the other route.
+    """
 
     if OpenAI is None:
         raise RuntimeError("openai package is not installed. Install `openai` to use this provider.")
@@ -1299,6 +1307,7 @@ def generate_brief_md(config_path: str, *, seasonality: Optional[float] = None, 
     client = OpenAI(api_key=api_key)
 
     model_env = os.getenv("OPENAI_MODEL_ANALYSIS", "").strip()
+    style_env = (os.getenv("OPENAI_BRIEF_STYLE", "") or "").strip().lower() or "long"
     max_tokens_env = os.getenv("OPENAI_MAX_OUTPUT_TOKENS", "").strip()
     try:
         max_tokens = int(max_tokens_env) if max_tokens_env else 3000
@@ -1307,25 +1316,26 @@ def generate_brief_md(config_path: str, *, seasonality: Optional[float] = None, 
     if max_tokens <= 0:
         max_tokens = 3000
 
-    use_responses = False
-    responses_api = getattr(client, "responses", None)
-    if responses_api is not None and hasattr(responses_api, "create"):
-        use_responses = True
-    route_label = "responses" if use_responses else "chat"
+    # Route based on model name regex; fallback to presence of responses API if ambiguous
+    def _model_prefers_responses(model_name: str) -> bool:
+        return bool(re.match(r"^(gpt-5|o3)", model_name or ""))
 
-    if use_responses:
-        model = model_env or "gpt-5"
+    # Choose initial model and route
+    preferred_model = (model_env or "gpt-5").strip()
+    has_responses_api = getattr(getattr(client, "responses", None), "create", None) is not None
+    prefers_responses = _model_prefers_responses(preferred_model) and has_responses_api
+    route_label = "responses" if prefers_responses else "chat"
+    if prefers_responses:
+        model = preferred_model
     else:
-        if model_env and model_env.lower() != "gpt-5":
-            model = model_env
-        else:
-            model = "gpt-5-chat-latest"
+        # Use provided chat model if given, otherwise fall back to a chat variant
+        model = preferred_model if not _model_prefers_responses(preferred_model) else "gpt-5-chat-latest"
 
+    # System + User instructions for MD-only brief
     system_prompt = (
-        "You are a marketing analyst. Polish the provided markdown brief without changing headings "
-        "or numeric values. Do not remove sections. Replace the placeholder {{ADDITIONAL_INSIGHTS}} "
-        "with two or three grounded insights, marking any hypotheses explicitly. Never introduce "
-        "new metrics that are not in the draft."
+        "You are a senior performance marketer. Answer the seven required questions first in plain English "
+        "with definitions for any metric the first time it appears. Then add 'Additional Insights'. "
+        "Format as Markdown. Do not return JSON."
     )
 
     def _extract_chat_text(response: Any) -> str:
@@ -1377,60 +1387,146 @@ def generate_brief_md(config_path: str, *, seasonality: Optional[float] = None, 
                     parts.append(str(value))
         return "\n".join(parts)
 
+    # Build an artifact summary to provide extra grounding for the model
+    def _artifact_summary() -> str:
+        llm_payload = artifacts.get("llm_payload") or {}
+        windows = llm_payload.get("windows", {}) if isinstance(llm_payload, dict) else {}
+        def _fmt(v):
+            if v is None:
+                return "n/a"
+            try:
+                return f"{float(v):,.2f}"
+            except Exception:
+                return str(v)
+        lines: List[str] = [f"STYLE: {style_env}"]
+        if windows:
+            w7 = windows.get("7d", {})
+            w28 = windows.get("28d", {})
+            w90 = windows.get("90d", {})
+            lines.append("WINDOW KPIs:")
+            lines.append(f"- 7d: revenue={_fmt(w7.get('revenue_sum'))}, spend={_fmt(w7.get('ad_spend_sum'))}, orders={_fmt(w7.get('orders_sum'))}, MER={_fmt(w7.get('mer'))}, CAC={_fmt(w7.get('cac'))}, AOV={_fmt(w7.get('aov'))}")
+            lines.append(f"- 28d: revenue={_fmt(w28.get('revenue_sum'))}, spend={_fmt(w28.get('ad_spend_sum'))}, orders={_fmt(w28.get('orders_sum'))}, MER={_fmt(w28.get('mer'))}, CAC={_fmt(w28.get('cac'))}, AOV={_fmt(w28.get('aov'))}")
+            lines.append(f"- 90d: revenue={_fmt(w90.get('revenue_sum'))}, spend={_fmt(w90.get('ad_spend_sum'))}, orders={_fmt(w90.get('orders_sum'))}, MER={_fmt(w90.get('mer'))}, CAC={_fmt(w90.get('cac'))}, AOV={_fmt(w90.get('aov'))}")
+        eff = artifacts.get("efficiency") if isinstance(artifacts.get("efficiency"), dict) else None
+        if eff and eff.get("by_channel"):
+            lines.append("EFFICIENCY (by_channel, 28d window):")
+            for item in eff["by_channel"][:5]:
+                lines.append(f"- {item.get('channel','?')}: revenue={_fmt(item.get('revenue'))}, spend={_fmt(item.get('spend'))}, orders={_fmt(item.get('orders'))}")
+        sku_df = artifacts.get("sku_series")
+        if isinstance(sku_df, pd.DataFrame) and not sku_df.empty and 'date' in sku_df.columns:
+            df = sku_df.copy()
+            df['date'] = pd.to_datetime(df['date'], errors='coerce')
+            df = df.dropna(subset=['date'])
+            if not df.empty:
+                as_of = df['date'].max()
+                cutoff = as_of - pd.Timedelta(days=27)
+                win = df[df['date'].between(cutoff, as_of)]
+                if not win.empty:
+                    agg = win.groupby('product_title', dropna=False)['revenue'].sum().sort_values(ascending=False).head(5)
+                    lines.append("TOP SKUs (28d by revenue):")
+                    for name, rev in agg.items():
+                        label = normalize_product_title(name) if isinstance(name, str) else 'Unnamed Product'
+                        lines.append(f"- {label}: revenue={_fmt(rev)}")
+        anomalies = artifacts.get("anomalies")
+        if isinstance(anomalies, list) and anomalies:
+            lines.append("ANOMALIES:")
+            for a in anomalies[:3]:
+                lines.append(f"- {a.get('metric','metric')} {a.get('start_date','?')}→{a.get('end_date','?')}, peak_z={a.get('peak_z','?')}")
+        return "\n".join(lines)
+
+    user_content = (
+        f"BRIEF TEMPLATE (rendered):\n{template_text}\n\n"
+        f"ARTIFACT SUMMARIES:\n{_artifact_summary()}\n\n"
+        "Replace the placeholder {{ADDITIONAL_INSIGHTS}} with grounded insights."
+    )
+
     backoff = [8, 12, 16]
     brief_text = ""
     last_error: Optional[Exception] = None
 
+    def _call_responses_route() -> str:
+        kwargs: Dict[str, Any] = {
+            "model": model,
+            "input": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_content},
+            ],
+            "store": False,
+            "text": {"format": {"type": "text"}},
+        }
+        if max_tokens:
+            kwargs["max_output_tokens"] = max_tokens
+        # Only attach reasoning for models that accept it
+        if _model_prefers_responses(model):
+            kwargs["reasoning"] = {"effort": os.getenv("OPENAI_BRIEF_REASONING", "high")}
+        response = client.responses.create(**kwargs)
+        return _extract_responses_text(response)
+
+    def _call_chat_route() -> str:
+        # Safe chat params; avoid unsupported fields
+        kwargs: Dict[str, Any] = {
+            "model": model,
+            "messages": [
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_content},
+            ],
+        }
+        # Try max_tokens first; if that 4xx's we'll retry without it below
+        if max_tokens:
+            kwargs["max_tokens"] = max_tokens
+        try:
+            response = client.chat.completions.create(**kwargs)
+            return _extract_chat_text(response)
+        except Exception as exc:
+            # Remove max_tokens if it caused a 4xx and retry once
+            if "max_tokens" in kwargs:
+                try:
+                    kwargs.pop("max_tokens", None)
+                    response = client.chat.completions.create(**kwargs)
+                    return _extract_chat_text(response)
+                except Exception:
+                    raise exc
+            raise exc
+
+    primary = _call_responses_route if prefers_responses else _call_chat_route
+    fallback = _call_chat_route if prefers_responses else _call_responses_route
+
     for attempt in range(len(backoff)):
         try:
-            if use_responses:
-                kwargs: Dict[str, Any] = {
-                    "model": model,
-                    "input": [
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": template_text},
-                    ],
-                    "store": False,
-                }
-                if max_tokens:
-                    kwargs["max_output_tokens"] = max_tokens
-                kwargs["reasoning"] = {"effort": "high"}
-                response = client.responses.create(**kwargs)
-                brief_text = _extract_responses_text(response)
-            else:
-                kwargs = {
-                    "model": model,
-                    "messages": [
-                        {"role": "system", "content": system_prompt},
-                        {"role": "user", "content": template_text},
-                    ],
-                }
-                if max_tokens:
-                    kwargs["max_completion_tokens"] = max_tokens
-                response = client.chat.completions.create(**kwargs)
-                brief_text = _extract_chat_text(response)
+            brief_text = primary().strip()
             if brief_text:
+                break
+            # Empty text; try fallback route immediately
+            brief_text = fallback().strip()
+            if brief_text:
+                route_label = "fallback"  # signal we used the other path
                 break
         except RateLimitError as exc:
             last_error = exc
             if attempt == len(backoff) - 1:
-                raise
+                break
             time.sleep(backoff[attempt])
         except Exception as exc:  # pragma: no cover - network/runtime issues
             last_error = exc
-            if _is_rate_limit_error(exc) and attempt != len(backoff) - 1:
-                time.sleep(backoff[attempt])
-                continue
-            raise
-    else:  # pragma: no cover - defensive
-        if last_error is not None:
-            raise last_error
+            # Try the other route on 4xx/param issues
+            try:
+                brief_text = fallback().strip()
+                if brief_text:
+                    route_label = "fallback"
+                    break
+            except Exception:
+                if _is_rate_limit_error(exc) and attempt != len(backoff) - 1:
+                    time.sleep(backoff[attempt])
+                    continue
+                break
+    # end loop
 
     brief_text = (brief_text or "").strip()
     if not brief_text:
+        message = "Brief generation returned no text after primary and fallback routes. Check model (OPENAI_MODEL_ANALYSIS) and network logs."
         if last_error is not None:
-            raise RuntimeError("OpenAI returned empty brief text.") from last_error
-        raise RuntimeError("OpenAI returned empty brief text.")
+            raise RuntimeError(message) from last_error
+        raise RuntimeError(message)
 
     if "{{ADDITIONAL_INSIGHTS}}" in brief_text:
         brief_text = brief_text.replace(
@@ -1450,7 +1546,7 @@ def generate_brief_md(config_path: str, *, seasonality: Optional[float] = None, 
         missing = ",".join(sorted(set(template_result.missing_sections)))
         print(f"[Brief] missing:{missing}")
 
-    reasoning_suffix = " (reasoning=high)" if use_responses else ""
+    reasoning_suffix = " (reasoning=high)" if route_label in {"responses", "fallback"} and _model_prefers_responses(model) else ""
     print("[Brief] MD-only: model='{model}' route='{route}'{suffix} wrote {md}, {raw}".format(
         model=model,
         route=route_label,

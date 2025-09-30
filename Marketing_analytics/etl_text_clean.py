@@ -8,7 +8,8 @@ from typing import Optional, Tuple
 
 # Known mojibake patterns observed in Shopify exports (UTF-8 misreads)
 _MOJIBAKE_REPLACEMENTS = {
-    "\u221a\u2260": "ir",  # \N{SQUARE ROOT}\N{NOT EQUAL TO} -> "ir"
+    # "No√≠re" -> "Noire" (common Shopify export artefact)
+    "\u221a\u2260": "i",  # \N{SQUARE ROOT}\N{NOT EQUAL TO} -> "i"
     "\u00c2\u00a0": " ",     # non-breaking space artefacts
 }
 

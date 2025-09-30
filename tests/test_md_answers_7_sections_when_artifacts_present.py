@@ -36,8 +36,9 @@ def test_md_answers_7_sections_when_artifacts_present(md_only_context):
     metrics_heading = "## Metrics in Plain English"
     assert metrics_heading in lines, 'Metrics explainer missing'
     metrics_index = lines.index(metrics_heading)
-    assert metrics_index > positions[-1]
-    additional_index = lines.index('## Additional Insights Uncovered (Model Reasoning)')
+    # Metrics explainer should appear at the very top before required Q&As
+    assert metrics_index < positions[0]
+    additional_index = lines.index('## Additional Insights (Model Reasoning)')
     assert metrics_index < additional_index
 
 

@@ -632,9 +632,8 @@ def _hero_skus_section(
     else:
         units_column = None
 
+    # Use only sku_code for labeling; if missing, rely on product_title only
     recent['sku_value'] = recent.get('sku_code')
-    if recent['sku_value'].isna().all():
-        recent['sku_value'] = recent.get('sku')
 
     def _label_from_row(row: pd.Series) -> str:
         title_val = normalize_product_title(row.get('product_title', '') or '')
@@ -644,7 +643,7 @@ def _hero_skus_section(
         if isinstance(sku_val, str):
             sku_val = sku_val.strip()
         if sku_val:
-            return f"{sku_val} / {title_val}" if title_val else sku_val
+            return f"{sku_val} — {title_val}" if title_val else sku_val
         return title_val or 'Top SKU'
 
     recent['__label'] = recent.apply(_label_from_row, axis=1)
@@ -1149,6 +1148,9 @@ def build_md_only_template(
     segment_content = segment_section if segment_missing else "\n".join(segment_lines)
 
     templates: List[str] = [
+        "## Metrics in Plain English",
+        "\n".join(metrics_plain[1:]),
+        "",
         "## What are our three biggest opportunities for growth? (What/Why/How next week)",
         "\n".join(opportunities_lines),
         "",
@@ -1170,10 +1172,7 @@ def build_md_only_template(
         "## Which creatives actually move product on IG? (use by_creative, RPM/ROAS/CTR with guards)",
         creative_section,
         "",
-        "## Metrics in Plain English",
-        "\n".join(metrics_plain[1:]),
-        "",
-        "## Additional Insights Uncovered (Model Reasoning)",
+        "## Additional Insights (Model Reasoning)",
         "{{ADDITIONAL_INSIGHTS}}",
         "",
         "## Executive Summary",

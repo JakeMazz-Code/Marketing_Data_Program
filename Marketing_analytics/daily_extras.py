@@ -17,7 +17,7 @@ from Marketing_analytics.etl_text_clean import normalize_product_title, split_pr
 
 _RAW_FIELD_SYNONYMS: Dict[str, set[str]] = {
     'date': {'date', 'day', 'created_at', 'processed_at', 'order_date', 'order_created_at', 'transaction_date', 'reporting_date'},
-    'channel': {'channel', 'platform', 'source'},
+    'channel': {'channel', 'platform', 'source', 'network'},
     'campaign': {'campaign', 'campaign_name', 'ad_name', 'campaign_title', 'adgroup', 'adgroup_name', 'ad_group', 'ad_group_name'},
     'adset': {'adset', 'adset_name', 'ad_set'},
     'ad': {'ad', 'ad_name'},
@@ -26,7 +26,7 @@ _RAW_FIELD_SYNONYMS: Dict[str, set[str]] = {
     'product_title': {'product_title', 'lineitem_title', 'lineitem_name', 'product_name', 'title'},
     'units': {'units', 'quantity', 'qty', 'lineitem_quantity', 'units_sold'},
     'orders': {'orders', 'purchases', 'purchases_website', 'purchases_app', 'conversions', 'order_count'},
-    'revenue': {'revenue', 'purchase_value', 'purchase_value_website', 'conversion_value', 'total_made', 'gross_sales', 'net_sales', 'line_total', 'lineitem_total', 'lineitem_price_total', 'subtotal_price'},
+    'revenue': {'revenue', 'purchase_value', 'purchase_value_website', 'conversion_value', 'total_made', 'gross_sales', 'net_sales', 'line_total', 'lineitem_total', 'lineitem_price_total', 'subtotal_price', 'sales', 'value'},
     'discounts': {'discounts', 'sales_discounts', 'promo_value', 'lineitem_discount'},
     'returns': {'returns', 'sales_returns', 'refunds', 'refund_amount'},
     'shipping': {'shipping', 'sales_shipping', 'shipping_revenue', 'shipping_cost'},
@@ -620,6 +620,20 @@ class ExtraArtifactGenerator:
                 subset['channel'] = subset['channel'].apply(_normalize_channel)
                 if subset['channel'].isna().all():
                     subset['channel'] = channel_guess
+                # If channel column appears numeric/empty, coerce to 'Other' and warn
+                ch_series = subset['channel']
+                looks_numeric = False
+                if pd.api.types.is_numeric_dtype(ch_series):
+                    looks_numeric = True
+                else:
+                    non_null = ch_series.dropna().astype(str).str.strip()
+                    if not non_null.empty and (non_null.str.match(r'^\d+(?:\.\d+)?$').mean() > 0.9):
+                        looks_numeric = True
+                if looks_numeric:
+                    examples = list(pd.unique(ch_series.dropna().astype(str)))[:5]
+                    if examples:
+                        print(f"Channel column appears numeric; coercing to 'Other'. Examples: {examples}")
+                    subset['channel'] = 'Other'
             else:
                 subset['channel'] = channel_guess
             frames.append(subset)
@@ -790,17 +804,62 @@ class ExtraArtifactGenerator:
     def _write_efficiency_summary(self, channel_result: ArtifactResult, creative_result: ArtifactResult) -> Optional[ArtifactResult]:
         channel_df = channel_result.frame
         if channel_df is None or channel_df.empty or 'date' not in channel_df.columns:
-            return None
+            # Emit a stub aligned to series.jsonl if possible
+            series_path = self.artifacts_dir / 'series.jsonl'
+            as_of = None
+            if series_path.exists():
+                try:
+                    series_df = pd.read_json(series_path, lines=True)
+                    if 'date' in series_df.columns and not series_df.empty:
+                        as_of = pd.to_datetime(series_df['date'], errors='coerce').max()
+                except Exception:
+                    as_of = None
+            if as_of is None or pd.isna(as_of):
+                return None
+            payload = {
+                'as_of': as_of.strftime('%Y-%m-%d'),
+                'window_days': 28,
+                'scope': 'paid',
+                'by_channel': [],
+                'by_creative': [],
+            }
+            path = self.artifacts_dir / 'efficiency.json'
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(payload, indent=2), encoding='utf-8')
+            print("efficiency: no rows in last 28d (no channel frame); wrote empty summary")
+            return ArtifactResult(name='efficiency', filename='efficiency.json', path=path, rows=0)
         working = channel_df.copy()
         working['date'] = pd.to_datetime(working['date'], errors='coerce')
         working = working.dropna(subset=['date'])
         if working.empty:
             return None
-        as_of = working['date'].max()
+        # Align as_of with series.jsonl max(date) when available
+        series_path = self.artifacts_dir / 'series.jsonl'
+        as_of = None
+        if series_path.exists():
+            try:
+                series_df = pd.read_json(series_path, lines=True)
+                if 'date' in series_df.columns and not series_df.empty:
+                    as_of = pd.to_datetime(series_df['date'], errors='coerce').max()
+            except Exception:
+                as_of = None
+        if as_of is None or pd.isna(as_of):
+            as_of = working['date'].max()
         cutoff = as_of - pd.Timedelta(days=27)
         window = working[(working['date'] >= cutoff) & (working['date'] <= as_of)].copy()
         if window.empty:
-            return None
+            payload = {
+                'as_of': as_of.strftime('%Y-%m-%d'),
+                'window_days': 28,
+                'scope': 'paid',
+                'by_channel': [],
+                'by_creative': [],
+            }
+            path = self.artifacts_dir / 'efficiency.json'
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(json.dumps(payload, indent=2), encoding='utf-8')
+            print("efficiency: no rows in last 28d; wrote empty summary")
+            return ArtifactResult(name='efficiency', filename='efficiency.json', path=path, rows=0)
         for col in ['revenue', 'ad_spend', 'orders']:
             if col in window.columns:
                 window[col] = pd.to_numeric(window[col], errors='coerce').fillna(0.0)
